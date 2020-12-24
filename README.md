@@ -8,4 +8,4 @@ I am following an **awesome tutorial** from [this site](https://viewsourcecode.o
 I have made a few changes in the original code of ```kilo``` contained in ```kilo.c``` according to the tutorial.
 
 
-All other files in this repository are licensed under MIT License.
+All other files in this repository are licensed under MIT License (see ```LICENSE```).
