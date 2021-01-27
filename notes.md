@@ -16,9 +16,19 @@ reference [stackoverflow](https://stackoverflow.com/questions/7248031/meaning-of
 - On most linux platforms, cc almost always points to /usr/bin/gcc (which is GNU's gcc compiler).
 
 reference 
-- [stackoverflow](https://stackoverflow.com/questions/939989/invoking-gcc-as-cc-versus-gcc/30921933)
+- check this first [stackoverflow](https://stackoverflow.com/questions/939989/invoking-gcc-as-cc-versus-gcc/30921933)
 - [stackoverflow](https://stackoverflow.com/questions/1516609/difference-between-cc-gcc-and-g)
 
 ----
 
+**how to use .gitignore file**
+- [stackoverflow](https://stackoverflow.com/questions/4308610/how-to-ignore-certain-files-in-git)
+- [Bitbucke](https://www.atlassian.com/git/tutorials/saving-changes/gitignore)
+
+<br>
+
+**Git push results in “Authentication Failed”**
+- if you face this issue then head over to [stackoverflow](https://stackoverflow.com/questions/17659206/git-push-results-in-authentication-failed)
+
+----
 
