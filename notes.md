@@ -32,3 +32,15 @@ reference
 
 ----
 
+## Step 2
+
+made the makefile and noted what all was used -
+- $(CC) is an implicit variable where CC = gcc. More variables in GNU's [site](https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html)
+- quick intro to makefiles by [washington uni](https://courses.cs.washington.edu/courses/cse451/99wi/Section/makeintro.html)
+- -Wall gives **all w**arnings - basically it gives more warning out of your C code.
+- -Wextra - gives more warnings (yes, it seems I want the code to be *thoroughly* checked).
+- -pedantic - it makes the code to follow ANSI way of writing code (it is the standard of writing C code). [purpose of using](https://stackoverflow.com/questions/2855121/what-is-the-purpose-of-using-pedantic-in-gcc-g-compiler) and [this](https://softwareengineering.stackexchange.com/questions/88532/whether-to-use-pedantic-flag-in-g-or-not)
+- -std=c99 specifies the exact version of the C language standard we’re using, which is C99.
+
+----
+ 
