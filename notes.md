@@ -23,7 +23,7 @@ reference
 
 **how to use .gitignore file**
 - [stackoverflow](https://stackoverflow.com/questions/4308610/how-to-ignore-certain-files-in-git)
-- [Bitbucke](https://www.atlassian.com/git/tutorials/saving-changes/gitignore)
+- [Bitbucket](https://www.atlassian.com/git/tutorials/saving-changes/gitignore)
 
 <br>
 
@@ -42,5 +42,8 @@ made the makefile and noted what all was used -
 - -pedantic - it makes the code to follow ANSI way of writing code (it is the standard of writing C code). [purpose of using](https://stackoverflow.com/questions/2855121/what-is-the-purpose-of-using-pedantic-in-gcc-g-compiler) and [this](https://softwareengineering.stackexchange.com/questions/88532/whether-to-use-pedantic-flag-in-g-or-not)
 - -std=c99 specifies the exact version of the C language standard we’re using, which is C99.
 
+<br>
+
+(*note: just found out that "vimtutor" exists in the CLI and you can learn vim basics in ~30 min*)
 ----
  
