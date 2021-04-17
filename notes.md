@@ -46,4 +46,39 @@ made the makefile and noted what all was used -
 
 (*note: just found out that "vimtutor" exists in the CLI and you can learn vim basics in ~30 min*)
 ----
- 
+
+## Step 3
+
+- `STDIN_FILENO` is the default data stream for input from the command line, and its value is `0`. [man page](https://man7.org/linux/man-pages/man3/stdin.3.html)
+- [Stack Overflow](https://stackoverflow.com/questions/5256599/what-are-file-descriptors-explained-in-simple-terms) has simpler definition given one of them which is -> 
+
+```
+a) File Descriptors (FD) are non-negative integers (0, 1, 2, ...) that are associated with files that are opened. 
+b)  0, 1, 2 are standard FD's that corresponds to STDIN_FILENO, STDOUT_FILENO and STDERR_FILENO (defined in unistd.h) opened by default on behalf of shell when the program starts.
+```
+
+- The thing to note is that each process which deals with a file (can say almost every process since everything is a file in Linux), has its own file descriptor (FD), which is **unique per process**.
+
+From the man page for the `read()` function.
+```bash
+SYNOPSIS
+       #include <unistd.h>
+
+       ssize_t read(int fd, void *buf, size_t count);
+
+DESCRIPTION
+       read()  attempts to read up to count bytes from file descriptor fd into the buffer starting at buf.
+
+```
+What we can get from this is that `*buf` is a ptr to the variable which points to the variable's address space. `count` accepts the number of bytes to the `*buf`. And `fd` is a file descriptor.
+
+<br>
+
+Canonical mode vs raw mode - [Unix Stack Exchange](https://unix.stackexchange.com/questions/21752/what-s-the-difference-between-a-raw-and-a-cooked-device-driver)
+
+In cooked (canonical) mode, the terminal's commands can be edited before executing it (pressing `enter`). This means we can use backspace and modify it all before executing the command, the computer won't know about it.
+
+In Raw mode, the terminal send each character it gets in it to the computer. So, if we press backspace to edit strings, the computer knows about it.
+
+---
+
