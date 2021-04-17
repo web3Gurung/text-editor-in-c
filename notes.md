@@ -82,3 +82,6 @@ In Raw mode, the terminal send each character it gets in it to the computer. So,
 
 ---
 
+## Step 4
+  
+We want the terminal to exit the moment we press 'q' anywhere in the string. This means the program does not read the character entered after 'q'.
