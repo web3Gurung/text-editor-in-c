@@ -85,3 +85,16 @@ In Raw mode, the terminal send each character it gets in it to the computer. So,
 ## Step 4
   
 We want the terminal to exit the moment we press 'q' anywhere in the string. This means the program does not read the character entered after 'q'.
+
+```bash
+$ ./kilo 
+asdasdasd
+asdasdasdasdqdasd  # added a 'q' in the 5th value from the last
+$ dasd
+Command 'dasd' not found, did you mean:
+  command 'fasd' from deb fasd (1.0.1-1)
+  command 'dad' from deb debian-dad (1)
+  command 'nasd' from deb nas (1.9.4-6build1)
+  command 'dash' from deb dash (0.5.10.2-7)
+Try: sudo apt install <deb name>
+```
