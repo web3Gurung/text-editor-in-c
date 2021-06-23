@@ -11,23 +11,27 @@ reference [stackoverflow](https://stackoverflow.com/questions/7248031/meaning-of
 <br>
 
 **difference between "cc" and "gcc"**
+
 - CC is an environment variable referring to the system's C compiler.
 - there is no difference as such. 
 - On most linux platforms, cc almost always points to /usr/bin/gcc (which is GNU's gcc compiler).
 
 reference 
+
 - check this first [stackoverflow](https://stackoverflow.com/questions/939989/invoking-gcc-as-cc-versus-gcc/30921933)
 - [stackoverflow](https://stackoverflow.com/questions/1516609/difference-between-cc-gcc-and-g)
 
 ----
 
 **how to use .gitignore file**
+
 - [stackoverflow](https://stackoverflow.com/questions/4308610/how-to-ignore-certain-files-in-git)
 - [Bitbucket](https://www.atlassian.com/git/tutorials/saving-changes/gitignore)
 
 <br>
 
 **Git push results in “Authentication Failed”**
+
 - if you face this issue then head over to [stackoverflow](https://stackoverflow.com/questions/17659206/git-push-results-in-authentication-failed)
 
 ----
@@ -35,6 +39,7 @@ reference
 ## Step 2
 
 made the makefile and noted what all was used -
+
 - $(CC) is an implicit variable where CC = gcc. More variables in GNU's [site](https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html)
 - quick intro to makefiles by [washington uni](https://courses.cs.washington.edu/courses/cse451/99wi/Section/makeintro.html)
 - -Wall gives **all w**arnings - basically it gives more warning out of your C code.
@@ -60,6 +65,7 @@ b)  0, 1, 2 are standard FD's that corresponds to STDIN_FILENO, STDOUT_FILENO an
 - The thing to note is that each process which deals with a file (can say almost every process since everything is a file in Linux), has its own file descriptor (FD), which is **unique per process**.
 
 From the man page for the `read()` function.
+
 ```bash
 SYNOPSIS
        #include <unistd.h>
@@ -68,8 +74,8 @@ SYNOPSIS
 
 DESCRIPTION
        read()  attempts to read up to count bytes from file descriptor fd into the buffer starting at buf.
-
 ```
+
 What we can get from this is that `*buf` is a ptr to the variable which points to the variable's address space. `count` accepts the number of bytes to the `*buf`. And `fd` is a file descriptor.
 
 <br>
@@ -83,7 +89,7 @@ In Raw mode, the terminal send each character it gets in it to the computer. So,
 ---
 
 ## Step 4
-  
+
 We want the terminal to exit the moment we press 'q' anywhere in the string. This means the program does not read the character entered after 'q'.
 
 ```bash
@@ -98,3 +104,105 @@ Command 'dasd' not found, did you mean:
   command 'dash' from deb dash (0.5.10.2-7)
 Try: sudo apt install <deb name>
 ```
+
+---
+
+## Step 5
+
+Since the tutorial says about "tcgetattr()", we search about it in the man pages. Typing `man 3p tcgetattr`, we get the following:
+
+```
+NAME
+       tcgetattr — get the parameters associated with the terminal
+
+SYNOPSIS
+       #include <termios.h>
+
+       int tcgetattr(int fildes, struct termios *termios_p);
+
+DESCRIPTION
+       The tcgetattr() function shall get the parameters associated  with  the
+       terminal  referred to by fildes and store them in the termios structure
+       referenced by termios_p.  The fildes argument is an open file  descrip‐
+       tor associated with a terminal.
+
+       The termios_p argument is a pointer to a termios structure.
+
+       The tcgetattr() operation is allowed from any process.
+```
+
+in the above man page doc, `fildes` = `file descriptor`.
+
+<br>
+
+When we type `man 3 tcgetattr`, we get a ton of material from the man pages. Somewhere after scrolling, we find this:
+
+```
+tcgetattr() gets the parameters associated with the object referred by fd and stores  them  in
+the termios structure referenced by termios_p.  This function may be invoked from a background;
+however, the terminal attributes may be subsequently changed by a foreground process.
+
+tcsetattr() sets the parameters associated with the terminal (unless support is required  from
+the  underlying  hardware  that  is  not  available) from the termios structure referred to by
+termios_p.  optional_actions specifies when the changes take effect:
+```
+
+<br>
+
+Last but not the least, after going through the same above man page, we find a interesting thing about the terminal. About the size of input it excepts.
+
+```
+The maximum line length is 4096 chars (including the terminating newline  character);  lines
+longer than 4096 chars are truncated.  After 4095 characters, input processing (e.g., ISIG
+and ECHO* processing) continues, but any input data after 4095 characters up to (but not in‐
+cluding)  any  terminating  newline is discarded.  This ensures that the terminal can always
+receive more input until at least one line can be read.
+```
+
+
+
+<br>
+
+
+
+Step 5 seems a lot, but it's alright. After we edit the step 5 from the tutorial to our kilo.c, we dig deep into `man tcgetattr` and find out what `TCSAFLUSH` and `ECHO` is:
+
+```
+ECHO   Echo input characters.
+
+TCSAFLUSH
+              the change occurs after all output written to the object
+              referred  by fd has been transmitted, and all input that
+              has been received but not read will be discarded  before
+              the change is made.
+```
+
+
+
+<br>
+
+
+
+Since we turned off the `ECHO` property of the terminal, whatever we type is not printed on the terminal (just like the password field when we type `sudo`).
+
+Now, after quitting kilo (it responds to 'q' in the input btw) our bash shell got stuck since it was acting as if it was still running kilo. The tutorial says what to do if this happens -
+
+```
+After the program quits, depending on your shell, you may find your terminal is still not echoing what you type. Don’t worry, it will still listen to what you type. Just press Ctrl-C to start a fresh line of input to your shell, and type in reset and press Enter. This resets your terminal back to normal in most cases. Failing that, you can always restart your terminal emulator. 
+```
+
+<br>
+
+
+
+Now, some theory -
+
+The terminal attributes which we fed are read into a termios structure with the help of `tcgetattr`. After modyfying the attributes, we apply them to the terminal using `tcsetattr`. The TCSAFLUSH argument specifies when to apply the change: in this case, it waits for all pending output to be written to the terminal, and also discards any input that hasn’t been read.
+
+From the tutorial -
+
+The `c_lflag` field is for “local flags”. A comment in macOS’s <termios.h> describes it as a “dumping ground for other state”. So perhaps it should be thought of as “miscellaneous flags”. The other flag fields are `c_iflag` (input flags), `c_oflag` (output flags), and `c_cflag` (control flags), all of which we will have to modify to enable raw mode.
+
+`ECHO` is a bit flag, and its value is defined as `00000000000000000000000000001000` in binary. We use the NOT operator ( ` ~`) to reverse the bits and get `11111111111111111111111111110111`. Now to modify the value of `c_lflag` with this bitflag's value, we use the AND operator.
+
+---
