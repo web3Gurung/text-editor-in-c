@@ -144,7 +144,7 @@ however, the terminal attributes may be subsequently changed by a foreground pro
 
 tcsetattr() sets the parameters associated with the terminal (unless support is required  from
 the  underlying  hardware  that  is  not  available) from the termios structure referred to by
-termios_p.  optional_actions specifies when the changes take effect:
+termios_p.
 ```
 
 <br>
@@ -188,14 +188,20 @@ Since we turned off the `ECHO` property of the terminal, whatever we type is not
 Now, after quitting kilo (it responds to 'q' in the input btw) our bash shell got stuck since it was acting as if it was still running kilo. The tutorial says what to do if this happens -
 
 ```
-After the program quits, depending on your shell, you may find your terminal is still not echoing what you type. Don’t worry, it will still listen to what you type. Just press Ctrl-C to start a fresh line of input to your shell, and type in reset and press Enter. This resets your terminal back to normal in most cases. Failing that, you can always restart your terminal emulator. 
+After the program quits, depending on your shell, you may find
+your terminal is still not echoing what you type. Don’t worry,
+it will still listen to what you type. Just press Ctrl-C to 
+start a fresh line of input to your shell, and type in reset
+and press Enter. This resets your terminal back to normal in
+most cases. Failing that, you can always restart your
+terminal emulator. 
 ```
 
 <br>
 
 
 
-Now, some theory -
+**Now, some theory** -
 
 The terminal attributes which we fed are read into a termios structure with the help of `tcgetattr`. After modyfying the attributes, we apply them to the terminal using `tcsetattr`. The TCSAFLUSH argument specifies when to apply the change: in this case, it waits for all pending output to be written to the terminal, and also discards any input that hasn’t been read.
 
