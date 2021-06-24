@@ -167,7 +167,7 @@ receive more input until at least one line can be read.
 
 
 
-Step 5 seems a lot, but it's alright. After we edit the step 5 from the tutorial to our kilo.c, we dig deep into `man tcgetattr` and find out what `TCSAFLUSH` and `ECHO` is:
+Step 5 seems a lot, but it's alright. After we edit the step 5 from the tutorial to our kilo.c, we dig deep into `man tcgetattr` and find out what `TCSAFLUSH` and `ECHO` (ECHO is one of the constraint under `c_lflag` flag) is:
 
 ```
 ECHO   Echo input characters.
@@ -245,10 +245,10 @@ RETURN VALUE
 
 ## Step 7
 
-from `man tcgetattr`, there is a line which tells what `ICANON` flag does -
+from `man tcgetattr`, there is a line which tells what `ICANON` flag does (one of the constraint under `c_lflag` flag) -
 
 ```
-ICANON Enable canonical mode (described below).
+ICANON Enable canonical mode.
 ```
 
 What this flag does is that it allows us to turn off canonical mode. This means we will be reading input byte-by-byte, instead of line-by-line. Thanks to this step, the program will quit as soon as we press `q`.
@@ -299,4 +299,29 @@ By the way, if you happen to press Ctrl-S, you may find your program seems to be
 Also, if you press Ctrl-Z (or maybe Ctrl-Y), your program will be suspended to the background. Run the fg command to bring it back to the foreground. 
 ```
 
+----
 
+## Step 9
+
+In this step, we are turning off the default signal `Ctrl+C` and `Ctrl+Z` sends to the terminal. By default, Ctrl-C sends a SIGINT signal to the current process which causes it to terminate, and Ctrl-Z sends a SIGTSTP signal to the current process which causes it to suspend (we can type `fg`)
+
+```
+c_lflag flag constants:
+
+       ISIG   When  any  of  the characters INTR, QUIT, SUSP, or DSUSP are received, generate the corresponding signal.
+```
+
+<br>
+
+Now we can only exit kilo by pressing 'q' and not `Ctrl+C` or `Ctrl+Z`.
+
+```bash
+$ ./kilo
+1
+2
+3  # Ctrl+C
+4
+26  # Ctrl+Z
+```
+
+----
