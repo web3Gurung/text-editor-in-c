@@ -50,6 +50,8 @@ made the makefile and noted what all was used -
 <br>
 
 (*note: just found out that "vimtutor" exists in the CLI and you can learn vim basics in ~30 min*)
+
+
 ----
 
 ## Step 3
@@ -86,7 +88,7 @@ In cooked (canonical) mode, the terminal's commands can be edited before executi
 
 In Raw mode, the terminal send each character it gets in it to the computer. So, if we press backspace to edit strings, the computer knows about it.
 
----
+----
 
 ## Step 4
 
@@ -105,7 +107,7 @@ Command 'dasd' not found, did you mean:
 Try: sudo apt install <deb name>
 ```
 
----
+----
 
 ## Step 5
 
@@ -149,7 +151,7 @@ termios_p.
 
 <br>
 
-Last but not the least, after going through the same above man page, we find a interesting thing about the terminal. About the size of input it excepts.
+Last but not the least, after going through the same above man page, we find a interesting thing abou   t the terminal. About the size of input it excepts.
 
 ```
 The maximum line length is 4096 chars (including the terminating newline  character);  lines
@@ -188,13 +190,11 @@ Since we turned off the `ECHO` property of the terminal, whatever we type is not
 Now, after quitting kilo (it responds to 'q' in the input btw) our bash shell got stuck since it was acting as if it was still running kilo. The tutorial says what to do if this happens -
 
 ```
-After the program quits, depending on your shell, you may find
-your terminal is still not echoing what you type. Don’t worry,
-it will still listen to what you type. Just press Ctrl-C to 
-start a fresh line of input to your shell, and type in reset
-and press Enter. This resets your terminal back to normal in
-most cases. Failing that, you can always restart your
-terminal emulator. 
+After the program quits, depending on your shell, you may find your terminal is still 
+not echoing what you type. Don’t worry, it will still listen to what you type. Just 
+press Ctrl-C to start a fresh line of input to your shell, and type in reset
+and press Enter. This resets your terminal back to normal in most cases. Failing that,
+you can always restart your terminal emulator. 
 ```
 
 <br>
@@ -211,4 +211,31 @@ The `c_lflag` field is for “local flags”. A comment in macOS’s <termios.h>
 
 `ECHO` is a bit flag, and its value is defined as `00000000000000000000000000001000` in binary. We use the NOT operator ( ` ~`) to reverse the bits and get `11111111111111111111111111110111`. Now to modify the value of `c_lflag` with this bitflag's value, we use the AND operator.
 
----
+----
+
+## step 6
+
+In this step, we are making our text editor keep the original values of the terminal attributes and execute it after it gets terminated. We do this by using `atexit()` function to register our disableRawMode() function to be called automatically when the program exits, whether it exits by returning from main(), or by calling the exit() function.
+
+
+from the man page of `man atexit`
+```
+NAME
+       atexit - register a function to be called at normal process termination
+
+SYNOPSIS
+       #include <stdlib.h>
+
+       int atexit(void (*function)(void));
+
+DESCRIPTION
+       The  atexit()  function  registers  the given function to be called at normal process termination, either via
+       exit(3) or via return from the program's main().  Functions so registered are called in the reverse order  of
+       their registration; no arguments are passed.
+
+       The same function may be registered multiple times: it is called once for each registration.
+
+RETURN VALUE
+       The atexit() function returns the value 0 if successful; otherwise it returns a nonzero value.
+```
+
