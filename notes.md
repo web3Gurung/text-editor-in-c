@@ -213,9 +213,11 @@ The `c_lflag` field is for “local flags”. A comment in macOS’s <termios.h>
 
 ----
 
-## step 6
+## Step 6
 
 In this step, we are making our text editor keep the original values of the terminal attributes and execute it after it gets terminated. We do this by using `atexit()` function to register our disableRawMode() function to be called automatically when the program exits, whether it exits by returning from main(), or by calling the exit() function.
+
+We're storing the original terminal attributes in a global variable, `orig_termios`. We assign the orig_termios struct to the raw struct in order to make a copy of it before we start making our changes. One thing to remeember is that our text editor exits after pressing 'q' or `Ctrl + c` and it it discards any unread input before applying the changes to the terminal.
 
 
 from the man page of `man atexit`
@@ -239,3 +241,16 @@ RETURN VALUE
        The atexit() function returns the value 0 if successful; otherwise it returns a nonzero value.
 ```
 
+----
+
+## Step 7
+
+from `man tcgetattr`, there is a line which tells what `ICANON` flag does -
+
+```
+ICANON Enable canonical mode (described below).
+```
+
+What this flag does is that it allows us to turn off canonical mode. This means we will be reading input byte-by-byte, instead of line-by-line. Thanks to this step, the program will quit as soon as we press `q`.
+
+----
