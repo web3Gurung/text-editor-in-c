@@ -248,6 +248,8 @@ RETURN VALUE
 from `man tcgetattr`, there is a line which tells what `ICANON` flag does (one of the constraint under `c_lflag` flag) -
 
 ```
+The setting of the ICANON canon flag in c_lflag determines whether the terminal is operating in canonical mode  (ICANON  set)  or  non‐canonical mode (ICANON unset).  By default, ICANON is set.
+       
 ICANON Enable canonical mode.
 ```
 
@@ -323,5 +325,47 @@ $ ./kilo
 4
 26  # Ctrl+Z
 ```
+
+----
+
+## Step 10
+
+Just came across this (down below) from the man page of termios -
+
+```
+Raw mode
+       cfmakeraw()  sets  the  terminal to something like the "raw" mode of the old Version 7 terminal driver: input is available character by
+       character, echoing is disabled, and all special processing of terminal input and output  characters  is  disabled.   The  terminal  at‐
+       tributes are set as follows:
+
+           termios_p->c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
+                           | INLCR | IGNCR | ICRNL | IXON);
+           termios_p->c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+```
+
+We see that we our kilo's `c_lflag` matches the flags from the above doc.
+
+<br>
+
+By default, Ctrl-S and Ctrl-Q are used for [software flow control](https://en.wikipedia.org/wiki/Software_flow_control). Ctrl-S stops data from being transmitted to the terminal until you press Ctrl-Q.
+
+
+From the man pages of termios, we get what `IXON` means -
+
+```
+IXON   Enable XON/XOFF flow control on output.
+```
+
+The "I" here means input flag (unlike ISIG and ICANON). `XON` comes from the names of the two control characters that `Ctrl-S` and `Ctrl-Q` produce: `XOFF` to pause transmission and `XON` to resume transmission.
+
+<br>
+
+```bash
+$ ./kilo
+19
+17  
+```
+
+Now Ctrl-S can be read as a 19 byte and Ctrl-Q can be read as a 17 byte.
 
 ----
