@@ -254,3 +254,49 @@ ICANON Enable canonical mode (described below).
 What this flag does is that it allows us to turn off canonical mode. This means we will be reading input byte-by-byte, instead of line-by-line. Thanks to this step, the program will quit as soon as we press `q`.
 
 ----
+
+## Step 8
+
+This step seemed as if kilo is imbued with magic. See for yourself:
+
+```bash
+$ ./kilo 
+116 ('t')
+104 ('h')
+105 ('i')
+115 ('s')
+105 ('i')
+115 ('s')
+99 ('c')
+111 ('o')
+111 ('o')
+111 ('o')
+108 ('l')
+33 ('!')
+```
+
+Pressed 'q' to exit kilo.
+
+<br>
+
+What we've added in this step is `iscntrl()` and `printf()`, from `ctype.h` and `stdio.h`, respectively. Now pasting notes from the turorial since it explainsit in a great manner -
+
+`iscntrl()` tests whether a character is a control character. Control characters are nonprintable characters that we don’t want to print to the screen. ASCII codes 0–31 are all control characters, and 127 is also a control character. ASCII codes 32–126 are all printable. We can check out [ASCII table](https://www.asciitable.com/) for more info on ASCII characters.
+
+printf() can print multiple representations of a byte. %d tells it to format the byte as a decimal number (its ASCII code), and %c tells it to write out the byte directly, as a character.
+
+<br>
+
+Arrow keys, Page Up, Page Down, Home, and End - There are all escape sequences, we can see that after pressing these buttons, the first byte is `27`, `[` followed by 1-2 bytes. All escape sequences start with `27`. And one nice observation is that the `Esc` button shows us `27` as the decimal output when pressed.
+
+<br>
+
+From the turorial:
+
+```
+By the way, if you happen to press Ctrl-S, you may find your program seems to be frozen. What you’ve done is you’ve asked your program to stop sending you output. Press Ctrl-Q to tell it to resume sending you output.
+
+Also, if you press Ctrl-Z (or maybe Ctrl-Y), your program will be suspended to the background. Run the fg command to bring it back to the foreground. 
+```
+
+
