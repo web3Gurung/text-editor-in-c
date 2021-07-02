@@ -331,6 +331,7 @@ $ ./kilo
 ## Step 10
 
 Just came across this (down below) from the man page of termios -
+**This will be handy - you'll understand this after step 15.**
 
 ```
 Raw mode
@@ -340,7 +341,11 @@ Raw mode
 
            termios_p->c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
                            | INLCR | IGNCR | ICRNL | IXON);
+           termios_p->c_oflag &= ~OPOST;
            termios_p->c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+           termios_p->c_cflag &= ~(CSIZE | PARENB);
+           termios_p->c_cflag |= CS8;
+
 ```
 
 We see that we our kilo's `c_lflag` matches the flags from the above doc.
@@ -369,3 +374,23 @@ $ ./kilo
 Now Ctrl-S can be read as a 19 byte and Ctrl-Q can be read as a 17 byte.
 
 ----
+
+## Step 11
+
+From the tutorial -
+
+```
+On some systems, when you type Ctrl-V, the terminal waits for you to type another character and then 
+sends that character literally. For example, before we disabled Ctrl-C, you might’ve been able to type 
+Ctrl-V and then Ctrl-C to input a 3 byte. We can turn off this feature using the IEXTEN flag.
+```
+
+This is something which didn't happen in my terminal when kilo was running. Nevertheless, I will be adding the flag `IEXTEN` to the c_lflag.
+
+From the man pages -
+
+```
+IEXTEN Enable  implementation-defined  input processing.  This flag, as well as ICANON must be enabled for the special characters EOL2, LNEXT, REPRINT, WERASE to be interpreted, and for the IUCLC flag to be effective.
+```
+
+
