@@ -51,7 +51,6 @@ made the makefile and noted what all was used -
 
 (*note: just found out that "vimtutor" exists in the CLI and you can learn vim basics in ~30 min*)
 
-
 ----
 
 ## Step 3
@@ -161,11 +160,7 @@ cluding)  any  terminating  newline is discarded.  This ensures that the termina
 receive more input until at least one line can be read.
 ```
 
-
-
 <br>
-
-
 
 Step 5 seems a lot, but it's alright. After we edit the step 5 from the tutorial to our kilo.c, we dig deep into `man tcgetattr` and find out what `TCSAFLUSH` and `ECHO` (ECHO is one of the constraint under `c_lflag` flag) is:
 
@@ -179,11 +174,7 @@ TCSAFLUSH
               the change is made.
 ```
 
-
-
 <br>
-
-
 
 Since we turned off the `ECHO` property of the terminal, whatever we type is not printed on the terminal (just like the password field when we type `sudo`).
 
@@ -198,8 +189,6 @@ you can always restart your terminal emulator.
 ```
 
 <br>
-
-
 
 **Now, some theory** -
 
@@ -219,8 +208,8 @@ In this step, we are making our text editor keep the original values of the term
 
 We're storing the original terminal attributes in a global variable, `orig_termios`. We assign the orig_termios struct to the raw struct in order to make a copy of it before we start making our changes. One thing to remeember is that our text editor exits after pressing 'q' or `Ctrl + c` and it it discards any unread input before applying the changes to the terminal.
 
-
 from the man page of `man atexit`
+
 ```
 NAME
        atexit - register a function to be called at normal process termination
@@ -249,7 +238,7 @@ from `man tcgetattr`, there is a line which tells what `ICANON` flag does (one o
 
 ```
 The setting of the ICANON canon flag in c_lflag determines whether the terminal is operating in canonical mode  (ICANON  set)  or  non‐canonical mode (ICANON unset).  By default, ICANON is set.
-       
+
 ICANON Enable canonical mode.
 ```
 
@@ -345,7 +334,6 @@ Raw mode
            termios_p->c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
            termios_p->c_cflag &= ~(CSIZE | PARENB);
            termios_p->c_cflag |= CS8;
-
 ```
 
 We see that we our kilo's `c_lflag` matches the flags from the above doc.
@@ -353,7 +341,6 @@ We see that we our kilo's `c_lflag` matches the flags from the above doc.
 <br>
 
 By default, Ctrl-S and Ctrl-Q are used for [software flow control](https://en.wikipedia.org/wiki/Software_flow_control). Ctrl-S stops data from being transmitted to the terminal until you press Ctrl-Q.
-
 
 From the man pages of termios, we get what `IXON` means -
 
@@ -393,12 +380,35 @@ From the man pages -
 IEXTEN Enable  implementation-defined  input processing.  This flag, as well as ICANON must be enabled for the special characters EOL2, LNEXT, REPRINT, WERASE to be interpreted, and for the IUCLC flag to be effective.
 ```
 
-
 ---
 
 ## Step 12
+
 `Ctrl + J`, `Ctrl + M` and the `Enter` key - all have the same output. But what should happen is pressing `Ctrl + M` should print out `13` since it's the 13th alphabet.
 
 It turns out that the terminal is helpfully translating any carriage returns (13, '\r') inputted by the user into newlines (10, '\n'). To turn out this feature, we add `ICRNL` to the input flag.
 
+from `man termios`
+
+```
+ICRNL  Translate carriage return to newline on input
+```
+
 Now `Ctrl-M` is read as a 13 (carriage return), and the Enter key is also read as a 13.
+
+
+
+----
+
+## Step 13 - turning off the output processing
+
+From the tutorial -
+
+```
+It turns out that the terminal does a similar translation on the output side. It translates each newline ("\n") we print into a carriage return followed by a newline ("\r\n"). The terminal requires both of these characters in order to start a new line of text.
+```
+
+We added OPOST output flag in the c_oflag.
+```
+O means it’s an output flag, and I assume POST stands for “post-processing of output”.
+```
