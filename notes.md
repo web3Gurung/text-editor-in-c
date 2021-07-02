@@ -394,3 +394,11 @@ IEXTEN Enable  implementation-defined  input processing.  This flag, as well as 
 ```
 
 
+---
+
+## Step 12
+`Ctrl + J`, `Ctrl + M` and the `Enter` key - all have the same output. But what should happen is pressing `Ctrl + M` should print out `13` since it's the 13th alphabet.
+
+It turns out that the terminal is helpfully translating any carriage returns (13, '\r') inputted by the user into newlines (10, '\n'). To turn out this feature, we add `ICRNL` to the input flag.
+
+Now `Ctrl-M` is read as a 13 (carriage return), and the Enter key is also read as a 13.
