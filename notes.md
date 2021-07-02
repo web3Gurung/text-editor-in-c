@@ -408,7 +408,17 @@ From the tutorial -
 It turns out that the terminal does a similar translation on the output side. It translates each newline ("\n") we print into a carriage return followed by a newline ("\r\n"). The terminal requires both of these characters in order to start a new line of text.
 ```
 
+<br>
+
+side note: check out IBM's man page for termios [here](https://www.ibm.com/docs/en/zos/2.3.0?topic=descriptions-stty-set-display-terminal-options)
+
 We added OPOST output flag in the c_oflag.
 ```
 O means it’s an output flag, and I assume POST stands for “post-processing of output”.
 ```
+
+---
+
+## Step 14
+We add carriage returns to the `printf()` statements, so that the characters don't move across the page but instead move to the next line.
+
