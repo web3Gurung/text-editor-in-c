@@ -473,3 +473,31 @@ $ ./kilo
 As we can see after this step, our kilo prints out `0` in a continuously manner. Step 16 fully turns our terminal into raw mode.
 
 -----
+
+## step 17 - adding the `die()` function
+
+This `die()` function prints the error message and ends kilo.
+
+
+
+from `man errno`
+
+```
+errno - number of last error
+```
+
+After scrolling more on this manual for errno, we find the different values set for different errors.
+
+
+
+<br>
+
+
+
+From the turorial (it explains very well) -
+
+Most C library functions that fail will set the global `errno` variable to indicate what the error was. `perror()` looks at the global `errno` variable and prints a descriptive error message for it. It also prints the string given to it before it prints the error message, which is meant to provide context about what part of your code caused the error.
+
+After printing out the error message, we exit the program with an exit status of `1`, which indicates failure (as would any non-zero value).
+
+------
