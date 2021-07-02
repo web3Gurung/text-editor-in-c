@@ -438,3 +438,38 @@ From the tutorial-
 ```
 
 A bit about parity checks from [Eddie Woo](https://www.youtube.com/watch?v=nxyqvB6bZs4)'s youtube video.
+
+----
+
+## Step 16 - timeout for `read()`
+
+
+
+from `man termios` -
+
+```
+VMIN   Minimum number of characters for noncanonical read (MIN).
+VTIME  Timeout in deciseconds for noncanonical read (TIME).
+```
+
+the rest of the explaination can be read in the tutorial itself since it's been explained in an awesome manner. The output of this step -
+
+```bash
+$ ./kilo 
+0
+0
+0
+0
+97 ('a')
+0
+100 ('d')
+0
+97 ('a')
+107 ('k')
+110 ('n')
+115 ('s')
+```
+
+As we can see after this step, our kilo prints out `0` in a continuously manner. Step 16 fully turns our terminal into raw mode.
+
+-----
