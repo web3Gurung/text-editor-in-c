@@ -396,8 +396,6 @@ ICRNL  Translate carriage return to newline on input
 
 Now `Ctrl-M` is read as a 13 (carriage return), and the Enter key is also read as a 13.
 
-
-
 ----
 
 ## Step 13 - turning off the output processing
@@ -413,6 +411,7 @@ It turns out that the terminal does a similar translation on the output side. It
 side note: check out IBM's man page for termios [here](https://www.ibm.com/docs/en/zos/2.3.0?topic=descriptions-stty-set-display-terminal-options)
 
 We added OPOST output flag in the c_oflag.
+
 ```
 O means it’s an output flag, and I assume POST stands for “post-processing of output”.
 ```
@@ -420,5 +419,22 @@ O means it’s an output flag, and I assume POST stands for “post-processing o
 ---
 
 ## Step 14
+
 We add carriage returns to the `printf()` statements, so that the characters don't move across the page but instead move to the next line.
 
+---
+
+## Step 15 - turning off Miscellaneous flags
+
+We added `BRKINT`, `INPCK`, `ISTRIP`, and `CS8` which all come from `<termios.h>`. It seems this step won't have any observable effect, but it was considered to be a major step in switching the terminal into raw mode in old terminal emulators.
+
+From the tutorial-
+
+```
+- When BRKINT is turned on, a break condition will cause a SIGINT signal to be sent to the program, like pressing Ctrl-C.
+- INPCK enables parity checking, which doesn’t seem to apply to modern terminal emulators.
+- ISTRIP causes the 8th bit of each input byte to be stripped, meaning it will set it to 0. This is probably already turned off.
+- CS8 is not a flag, it is a bit mask with multiple bits, which we set using the bitwise-OR (|) operator unlike all the flags we are turning off. It sets the character size (CS) to 8 bits per byte. On my system, it’s already set that way.
+```
+
+A bit about parity checks from [Eddie Woo](https://www.youtube.com/watch?v=nxyqvB6bZs4)'s youtube video.
