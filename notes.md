@@ -443,8 +443,6 @@ A bit about parity checks from [Eddie Woo](https://www.youtube.com/watch?v=nxyqv
 
 ## Step 16 - timeout for `read()`
 
-
-
 from `man termios` -
 
 ```
@@ -478,8 +476,6 @@ As we can see after this step, our kilo prints out `0` in a continuously manner.
 
 This `die()` function prints the error message and ends kilo.
 
-
-
 from `man errno`
 
 ```
@@ -488,11 +484,7 @@ errno - number of last error
 
 After scrolling more on this manual for errno, we find the different values set for different errors.
 
-
-
 <br>
-
-
 
 From the turorial (it explains very well) -
 
@@ -501,3 +493,20 @@ Most C library functions that fail will set the global `errno` variable to indi
 After printing out the error message, we exit the program with an exit status of `1`, which indicates failure (as would any non-zero value).
 
 ------
+
+## Step 18 - calling die() from various functions
+
+From the tutorial -
+
+`tcsetattr()`, `tcgetattr()`, and `read()` all return `-1` on failure, and set the `errno` value to indicate the error.
+
+An easy way to make `tcgetattr()` fail is to give your program a text file or a pipe as the standard input instead of your terminal. To give it a file as standard input, run `./kilo <kilo.c`. To give it a pipe, run `echo test | ./kilo`. Both should result in the same error from `tcgetattr()`, something like `Inappropriate ioctl for device`.
+
+
+
+```bash
+$ echo "test" | ./kilo
+tcgetattr: Inappropriate ioctl for device
+$ ./kilo <kilo
+tcgetattr: Inappropriate ioctl for device
+```
