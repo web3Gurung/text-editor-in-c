@@ -516,3 +516,34 @@ tcgetattr: Inappropriate ioctl for device
 ## Step 19 - divided kilo.c into sections
 
 ----
+
+## Step 20 - making `Ctrl + q` stop kilo instead of `q`
+
+Didn't understand much as to what happened when `Ctrl+q` is pressed. Thinking it works same like before when we pressed `q`, but now it also prints `17` - questioning.
+
+
+
+The `CTRL_KEY` macro bitwise-ANDs a character with the value `00011111`, in binary. And `00011111` is 31 in binary. Hmm, i think I got this.
+
+
+
+So, `00011111` when gets AND with `q` (which is 113, in hex it is `011`), results in `17` (somehow).
+
+Since the tutorial also says that `Ctrl` key in the terminal: it strips bits 5 and 6 from whatever key you press in combination with Ctrl, and sends that.
+
+
+
+Took a long time to figure this python code's output -
+
+```python
+>>> 0x011 & 0x11111
+17
+```
+
+So, when kilo was running in step 19, it printed out `Ctrl+q` as 17. And right now to exit our code, the terminal should read `17` in order to quit.
+
+
+
+I can be so wrong, but my mind is overloaded at the moment.
+
+----

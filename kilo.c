@@ -1,4 +1,5 @@
 /**** header files ****/
+
 #include <unistd.h>  // used for read()
 #include <termios.h> // used for tcgetattr() and tcsetattr()
 #include <stdlib.h>
@@ -7,11 +8,19 @@
 #include <ctype.h>  // for iscntrl()
 
 
+/**** defines - macros ****/
+
+#define CTRL_KEY(k) ((k) & 0x1f)
+
+
 /**** data ****/
+
 struct termios orig_termios;
 
 
+
 /**** terminal ****/
+
 void die(const char *s)
 {
     perror(s);
@@ -55,6 +64,7 @@ void enableRawMode()
 }
 
 
+
 /**** init ****/
 
 int main()
@@ -78,8 +88,8 @@ int main()
         {
             printf("%d ('%c')\r\n", c, c);
         }
-    
-        if (c == 'q')
+
+        if (c == CTRL_KEY('q'))
         {
             break;
         }
