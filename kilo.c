@@ -1,4 +1,4 @@
-// header files
+/**** header files ****/
 #include <unistd.h>  // used for read()
 #include <termios.h> // used for tcgetattr() and tcsetattr()
 #include <stdlib.h>
@@ -6,8 +6,12 @@
 #include <stdio.h>  // for printf()
 #include <ctype.h>  // for iscntrl()
 
+
+/**** data ****/
 struct termios orig_termios;
 
+
+/**** terminal ****/
 void die(const char *s)
 {
     perror(s);
@@ -50,6 +54,8 @@ void enableRawMode()
 
 }
 
+
+/**** init ****/
 
 int main()
 {

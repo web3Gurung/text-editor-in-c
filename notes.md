@@ -510,3 +510,9 @@ tcgetattr: Inappropriate ioctl for device
 $ ./kilo <kilo
 tcgetattr: Inappropriate ioctl for device
 ```
+
+----
+
+## Step 19 - divided kilo.c into sections
+
+----
